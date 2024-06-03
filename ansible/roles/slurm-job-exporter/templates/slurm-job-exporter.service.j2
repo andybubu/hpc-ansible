@@ -1,0 +1,16 @@
+[Unit]
+Description=Prometheus node exporter
+After=network.target remote-fs.target network-online.target autofs.service
+Requires=network-online.target
+
+[Service]
+User=prometheus
+Group=prometheus
+Type=simple
+EnvironmentFile=-/etc/sysconfig/prometheus-node-exporter
+ExecStart={{ slurm_job_exporter_paths.bin }}/slurm-job-exporter.py
+PIDFile=/var/run/slurm-job-exporter.pid
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target

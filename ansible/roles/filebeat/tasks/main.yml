@@ -1,0 +1,63 @@
+---
+# Copyright 2024 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# tasks file for filebeat
+- name: Create filebeat Directory
+  ansible.builtin.file:
+    path: '{{ item }}'
+    state: directory
+    mode: '0755'
+  loop:
+    - '{{ filebeat_paths.apps }}'
+    - '{{ filebeat_paths.modules }}'
+    - '{{ filebeat_paths.src }}'
+    - '{{ filebeat_paths.scripts }}'
+
+- name: Download Filebeat
+  ansible.builtin.get_url:
+    url: '{{ filebeat_url }}'
+    dest: '{{ paths.build }}'
+    mode: '0644'
+
+- name: Extract Filebeat archive
+  ansible.builtin.unarchive:
+    src: '{{ paths.build }}/{{ filebeat_tar }}'
+    dest: '{{ filebeat_paths.src }}'
+    extra_opts:
+      - "--wildcards"
+      - "*/filebeat"
+      - "--strip-components=1"
+    remote_src: yes
+
+- name: Create a filebeat config
+  ansible.builtin.template:
+    src: filebeat.yml.j2
+    dest: '{{ filebeat_paths.apps }}/filebeat.yml'
+
+- name: Create filebeat_prolog script
+  ansible.builtin.template:
+    src: filebeat_prolog.sh.j2
+    dest: '{{ filebeat_paths.scripts }}/filebeat_prolog.sh'
+    mode: '0755'
+
+- name: Create filebeat_epilog_aiml script
+  ansible.builtin.template:
+    src: filebeat_epilog_aiml.sh.j2
+    dest: '{{ filebeat_paths.scripts }}/filebeat_epilog_aiml.sh'
+    mode: '0755'
+
+- name: Remove downloaded tar file
+  ansible.builtin.file:
+    path: '{{ paths.build }}/{{ filebeat_tar }}'
+    state: absent
