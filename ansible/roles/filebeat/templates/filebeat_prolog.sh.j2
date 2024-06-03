@@ -1,0 +1,34 @@
+#!/bin/sh
+
+if [ X"$SLURM_STEP_ID" = "X" -a X"$SLURM_PROCID" = "X"0 ]
+then
+  echo "print =========================================="
+  echo "print SLURM_JOB_ID = $SLURM_JOB_ID"
+  echo "print SLURM_JOB_NODELIST = $SLURM_JOB_NODELIST"
+  echo "print =========================================="
+fi
+
+# Start a filebeat instance and capture the stdout
+# and stderr logs if they exist.
+# The following environment variables will be used
+# SLURM_JOB_USER
+# SLURM_ARRAY_JOB_ID
+# SLURM_ARRAY_TASK_ID
+
+logs=`/usr/local/slurm/bin/scontrol show job $SLURM_JOB_ID | grep "StdOut=\|StdErr=" | cut -d "=" -f 2-`
+[[ -z "$logs" ]] && { echo "Parameter for logs is empty, we can leave gracefully.." ; exit 0; }
+export STDERR_LOG_FOR_JOB=$(echo $logs | cut -f1 -d" ")
+export STDOUT_LOG_FOR_JOB=$(echo $logs | cut -f2 -d" ")
+export clustername=`/usr/local/slurm/bin/sacctmgr list cluster Format=Cluster%40 --noheader | awk '{print $1}'`
+
+# ELK Stack variables:
+export kb_host="https://hpc-slurm-dev.kb.us6-dev-elastic.gsk.com:9243"
+export es_host="https://hpc-slurm-dev.es.us6-dev-elastic.gsk.com:9243"
+export api_key="scmq74MBlIpU1-MQuf7e:######################"
+
+echo "print SLURMD_NODENAME = $SLURMD_NODENAME"
+echo "print SLURM_JOBID = $SLURM_JOBID"
+echo "print SLURM_JOB_USER = $SLURM_JOB_USER"
+
+# Add the SLURM_JOBID to the end of the command, it will be ignored by filebeat but can be used by the Slurm Epilog to identify the job that Filebeat is tailing
+/sbin/daemonize -u $SLURM_JOB_USER /home/prometheus/filebeat/current/filebeat --path.data /var/tmp/filebeat/$SLURM_JOB_USER-$SLURM_JOBID --path.logs /var/tmp/filebeat/$SLURM_JOB_USER-$SLURM_JOBID/logs -c /home/prometheus/filebeat/filebeat.yml -E slurm_job_id=${SLURM_JOBID}
