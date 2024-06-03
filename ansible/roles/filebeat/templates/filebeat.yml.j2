@@ -1,0 +1,54 @@
+# ============================== Filebeat inputs ===============================
+
+filebeat.inputs:
+
+# filestream is an input for collecting log messages from files.
+- type: filestream
+
+  # Unique ID among all inputs, an ID is required.
+  id: slurm-logs-${SLURMD_NODENAME}-${SLURM_JOB_USER}-${SLURM_JOBID}
+
+  # Change to true to enable this input configuration.
+  enabled: true
+
+  # Paths that should be crawled and fetched. Glob based paths.
+  paths:
+    - "${STDERR_LOG_FOR_JOB}"
+    - "${STDOUT_LOG_FOR_JOB}"
+  fields:
+    slurm_job_id: "${SLURM_JOBID}"
+    slurm_user_id: "${SLURM_JOB_USER}"
+  fields_under_root: true
+
+# ======================= Elasticsearch template setting =======================
+
+setup.template.settings:
+  index.number_of_shards: 1
+
+setup.template.name: "slurm-logs"
+setup.template.pattern: "slurm-logs-*"
+setup.template.enabled: true 
+
+# =================================== Kibana ===================================
+
+# Starting with Beats version 6.0.0, the dashboards are loaded via the Kibana API.
+# This requires a Kibana endpoint configuration.
+setup.kibana:
+
+  # Kibana Host
+  host: "${kb_host}"
+
+# ================================== Outputs ===================================
+
+# Configure what output to use when sending the data collected by the beat.
+
+# ---------------------------- Elasticsearch Output ----------------------------
+output.elasticsearch:
+  # Array of hosts to connect to. 
+  hosts: "${es_host}"
+  index: "slurm-logs-${clustername}-%{[agent.version]}"
+
+  # Authentication credentials - either API key or username/password.
+  api_key: "${api_key}"
+  allow_older_versions: true
+

@@ -1,0 +1,22 @@
+#!/bin/bash
+
+if [ X"$SLURM_STEP_ID" = "X" -a X"$SLURM_PROCID" = "X"0 ]
+then
+  echo "print =========================================="
+  echo "print ***** EPILOG SCRIPT RUNNING *****"
+  echo "print SLURM_JOB_ID = $SLURM_JOB_ID"
+  echo "print SLURM_JOB_NODELIST = $SLURM_JOB_NODELIST"
+  echo "print =========================================="
+fi
+
+# Kill any Filebeat processes associated with this Slurm job
+JOBID=$SLURM_JOBID
+USER=$SLURM_JOB_USER
+if [[ $USER != "root" ]]; then
+    sleep 10
+    pkill -9 -u ${USER} -f "filebeat.*${JOBID}$"
+    if [ $? -eq 0 ]; then
+        echo "Killed residual processes for $USER"
+    fi
+fi
+

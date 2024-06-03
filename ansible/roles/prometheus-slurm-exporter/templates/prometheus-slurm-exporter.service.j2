@@ -1,0 +1,15 @@
+[Unit]
+Description=Prometheus Slurm Exporter
+
+[Service]
+User=prometheus
+Group=prometheus
+Type=simple
+Environment=PATH=/usr/local/sbin
+EnvironmentFile=-/etc/sysconfig/prometheus-slurm-exporter
+ExecStart=/usr/local/bin/prometheus-slurm-exporter $OPTIONS
+Restart=always
+RestartSec=15
+
+[Install]
+WantedBy=multi-user.target
