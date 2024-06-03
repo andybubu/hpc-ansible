@@ -1,0 +1,8 @@
+---
+# defaults file for slurm-job-exporter
+slurm_job_exporter_url: https://github.com/guilbaults/slurm-job-exporter.git
+go_bin: "/usr/local/go/bin"
+
+slurm_job_exporter_paths:
+  src: '{{ paths.apps }}/slurm-job-exporter'
+  bin: '{{ paths.apps }}/slurm-job-exporter/bin'

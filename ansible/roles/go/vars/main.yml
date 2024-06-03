@@ -1,0 +1,4 @@
+---
+go_env:
+  GOPATH: "/usr/local/go"
+  PATH: "/usr/local/go/bin:{{ansible_env.PATH}}"

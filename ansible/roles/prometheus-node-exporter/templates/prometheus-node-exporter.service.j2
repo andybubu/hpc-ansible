@@ -1,0 +1,13 @@
+[Unit]
+Description=Prometheus node exporter
+After=network.target remote-fs.target network-online.target autofs.service
+Requires=network-online.target
+
+[Service]
+User=prometheus
+Group=prometheus
+EnvironmentFile=-/etc/sysconfig/prometheus-node-exporter
+ExecStart={{ node_exporter_paths.bin }}/node_exporter $OPTIONS
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,15 @@
+[Unit]
+Description=DCGM Exporter
+Wants=network-online.target
+After=network.target remote-fs.target network-online.target autofs.service
+
+[Service]
+User=prometheus
+Group=prometheus
+EnvironmentFile=-/etc/sysconfig/dcgm
+ExecStart=/bin/bash -c '/usr/bin/dcgm-exporter'
+Restart=always
+RestartSec=15
+
+[Install]
+WantedBy=multi-user.target

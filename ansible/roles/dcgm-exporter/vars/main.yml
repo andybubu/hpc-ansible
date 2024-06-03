@@ -1,0 +1,4 @@
+---
+# vars file for dcgm-exporter
+cuda_baseurl: "https://developer.download.nvidia.com/compute/cuda/repos/rhel$releasever/$basearch"
+cuda_gpgcheck: "https://developer.download.nvidia.com/compute/cuda/repos/rhel$releasever/$basearch/D42D0685.pub"

@@ -1,0 +1,7 @@
+---
+# defaults file for node-exporter
+node_exporter_url: https://github.com/prometheus/node_exporter.git
+
+node_exporter_paths:
+  src: '{{ paths.apps }}/prometheus-node-exporter'
+  bin: '{{ paths.apps }}/prometheus-node-exporter/bin'

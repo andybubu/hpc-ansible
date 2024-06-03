@@ -1,0 +1,11 @@
+---
+# defaults file for filebeat
+filebeat_version: 8.13.4
+filebeat_url: 'https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-{{ filebeat_version }}-linux-x86_64.tar.gz'
+filebeat_tar: 'filebeat-{{ filebeat_version }}-linux-x86_64.tar.gz'
+
+filebeat_paths:
+  apps: '/home/prometheus/filebeat'
+  modules: '/home/prometheus/filebeat/{{ filebeat_version }}/modules'
+  scripts: '/home/prometheus/filebeat/scripts'
+  src: '/home/prometheus/filebeat/{{ filebeat_version }}'

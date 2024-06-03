@@ -1,0 +1,4 @@
+---
+# defaults file for influxdb
+influxdb_baseurl: https://repos.influxdata.com/rhel/$releasever/$basearch/stable
+influxdb_gpgkey: https://repos.influxdata.com/influxdata-archive.key
