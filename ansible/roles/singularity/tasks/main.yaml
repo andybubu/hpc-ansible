@@ -22,14 +22,14 @@
     - '{{ ansible_os_family | lower }}-{{ ansible_distribution_major_version }}.yml'
     - '{{ ansible_os_family | lower }}.yml'
 
-- name: Mkdir
-  ansible.builtin.file:
-    path: '{{ item }}'
-    state: directory
-    mode: '0755'
-  loop:
-    - '{{ singularity_paths.apps }}'
-    - '{{ singularity_paths.modulefiles }}'
+# - name: Mkdir
+#   ansible.builtin.file:
+#     path: '{{ item }}'
+#     state: directory
+#     mode: '0755'
+#   loop:
+#     - '{{ singularity_paths.apps }}'
+#     - '{{ singularity_paths.modulefiles }}'
 
 - name: Install Singularity Dependencies
   ansible.builtin.package:
@@ -50,8 +50,7 @@
 - name: Build and Install Singularity
   ansible.builtin.shell:
     cmd: |
-      rpmbuild -tb "{{ singularity_tar }}" 
-    chdir: '{{ paths.build }}/{{ singularity_dir }}'
+      rpmbuild -tb "{{ paths.build }}/{{ singularity_tar }}" 
 
 - name: Install Singularity RPM
   yum:
