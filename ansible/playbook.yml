@@ -71,11 +71,13 @@
       msg: Update Ansible to at least {{min_ansible_version}} to use this playbook.
   - name: Slurm check
     command: sinfo
-      register: sinfo_result
-      failed_when: false
-      changed_when: false
+    register: sinfo_result
+    failed_when: false
+    changed_when: false
 
   roles:
+    - role: common
+      tags: ['common']
     - role: go
       tags: ['go']
     - role: prometheus-slurm-exporter
@@ -91,4 +93,7 @@
       tags: ['influxdb']
     - role: filebeat
       tags: ['filebeat']
-
+    - role: spack
+      tags: ['spack']
+    - role: singularity
+      tags: ['singularity']
