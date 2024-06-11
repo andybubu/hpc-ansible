@@ -1,0 +1,12 @@
+[Unit]
+Description=JWT token portal
+
+[Service]
+User=root
+Group=root
+Type=simple
+ExecStart=/bin/python /usr/local/tokenportal/jwtgenerator.py
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

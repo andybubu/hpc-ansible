@@ -57,18 +57,20 @@
       tags: ['common']
     - role: go
       tags: ['go']
-    - role: prometheus-slurm-exporter
-      tags: ['slurm']
     - role: dcgm-exporter
       tags: ['dcgm']
+    - role: filebeat
+      tags: ['filebeat']
+    - role: influxdb
+      tags: ['influxdb']
+    - role: jwt-portal
+      tags: ['jwt-portal']
+    - role: prometheus-slurm-exporter
+      tags: ['slurm']
     - role: prometheus-node-exporter
       tags: ['node']
     - role: slurm-job-exporter
       tags: ['job']
-    - role: influxdb
-      tags: ['influxdb']
-    - role: filebeat
-      tags: ['filebeat']
     - role: spack
       tags: ['spack']
     - role: singularity
