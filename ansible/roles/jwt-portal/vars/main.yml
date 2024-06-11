@@ -1,0 +1,11 @@
+---
+# vars file for jwt-portal
+jwt_python_dependencies:
+  - flask  
+  - flask_restful 
+  - gevent
+
+jwt_portal_dependencies:
+  - python3 
+  - python3-devel 
+  - gcc-c++

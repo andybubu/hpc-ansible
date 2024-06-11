@@ -12,13 +12,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# defaults file for filebeat
-filebeat_version: 8.13.4
-filebeat_url: 'https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-{{ filebeat_version }}-linux-x86_64.tar.gz'
-filebeat_tar: 'filebeat-{{ filebeat_version }}-linux-x86_64.tar.gz'
 
-filebeat_paths:
-  apps: '{{ paths.apps }}/filebeat'
-  modules: '{{ paths.apps }}/filebeat/{{ filebeat_version }}/modules'
-  scripts: '{{ paths.apps }}/filebeat/scripts'
-  src: '{{ paths.apps }}/filebeat/{{ filebeat_version }}'
+# handlers file for jwt-portal
+- name: Start tokenportal service
+  ansible.builtin.systemd:
+    name: tokenportal
+    daemon_reload: yes
+    enabled: yes
+    state: started
