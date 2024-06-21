@@ -30,6 +30,10 @@
 - name: Install epel-release Repository
   yum:
     name: "{{ epel_release_package | default('epel-release') }}"
+  register: yum_result
+  until: yum_result is succeeded or yum_result.attempts >= 5 
+  retries: 5
+  delay: 10 
 
 - name: Add NVIDIA CUDA Repository
   yum_repository:

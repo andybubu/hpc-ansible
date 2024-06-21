@@ -31,6 +31,10 @@
     url: '{{ go_url }}'
     dest: '{{ go_paths.build }}'
     mode: '0644'
+  register: download_result
+  retries: 5
+  delay: 10
+  until: download_result is succeeded
 
 - name: Install Go
   ansible.builtin.unarchive:
